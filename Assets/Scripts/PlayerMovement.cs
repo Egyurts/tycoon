@@ -15,6 +15,11 @@ public class PlayerMovement : MonoBehaviour
     public float lookXLimit = 45f;
 
 
+    float curSpeedX;
+    float curSpeedY;
+
+    bool isRunning;
+
     Vector3 moveDirection = Vector3.zero;
     float rotationX = 0;
 
@@ -36,12 +41,37 @@ public class PlayerMovement : MonoBehaviour
         Vector3 forward = transform.TransformDirection(Vector3.forward);
         Vector3 right = transform.TransformDirection(Vector3.right);
 
+        if (Player.instance.currentStamina > 0.1f)
+        {
+            isRunning = Input.GetKey(KeyCode.LeftShift);
+        }
+        else
+        {
+            isRunning = false;
+            Player.instance.isUsingStamina = false;
+        }
+
+
         // Press Left Shift to run
-        bool isRunning = Input.GetKey(KeyCode.LeftShift);
-        float curSpeedX = canMove ? (isRunning ? runSpeed : walkSpeed) * Input.GetAxis("Vertical") : 0;
-        float curSpeedY = canMove ? (isRunning ? runSpeed : walkSpeed) * Input.GetAxis("Horizontal") : 0;
+        if (isRunning)
+        {
+            curSpeedX = canMove ? (runSpeed) * Input.GetAxis("Vertical") : 0; 
+            curSpeedY = canMove ? (runSpeed) * Input.GetAxis("Horizontal") : 0;
+            Player.instance.DeacreaseStamina();
+            Player.instance.StopStaminaIncrease();
+            Debug.Log("run");
+           
+        }
+        else
+        {
+            curSpeedX = canMove ? (walkSpeed) * Input.GetAxis("Vertical") : 0;
+            curSpeedY = canMove ? (walkSpeed) * Input.GetAxis("Horizontal") : 0;
+            Debug.Log("walk");
+        }
+
         float movementDirectionY = moveDirection.y;
         moveDirection = (forward * curSpeedX) + (right * curSpeedY);
+
 
         #endregion
 
