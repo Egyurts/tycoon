@@ -24,8 +24,9 @@ public class Player : MonoBehaviour
 
     public TextMeshProUGUI infoText;
 
-    public GameObject[] army;
+    public List<GameObject> armyList = new List<GameObject>();
     public GameObject soilder_1;
+
 
     private void Awake()
     {
@@ -36,6 +37,7 @@ public class Player : MonoBehaviour
     {
         currentHealth = maxHealth;
         currentStamina = maxStamina;
+
     }
 
     void Update()
@@ -172,7 +174,7 @@ public class Player : MonoBehaviour
     {
         yield return new WaitForSeconds(timeForTraining);
         Instantiate(soilder_1, transform.position, Quaternion.identity);
-        army[army.Length] = soilder_1;
+        armyList.Add(soilder_1);
         StopCoroutine(TrainigSoilder(timeForTraining));
     }
 
