@@ -24,6 +24,9 @@ public class Player : MonoBehaviour
 
     public TextMeshProUGUI infoText;
 
+    public GameObject[] army;
+    public GameObject soilder_1;
+
     private void Awake()
     {
         instance = this;
@@ -141,5 +144,36 @@ public class Player : MonoBehaviour
         StopCoroutine(StaminaIncrease());
     }
 
+
+    public void EarnMoney(int amount)
+    {
+        currentMoney += amount; 
+    }
+
+    public void SpendMoney(int amount)
+    {
+        if (currentMoney - amount >= 0)
+        {
+            currentMoney -= amount; 
+        }
+        else
+        {
+            Debug.Log("Dony Have Enough Money");
+        }
+    }
+
+
+    public void TrainSoilder(float timeForTraining1)
+    {
+        StartCoroutine(TrainigSoilder(timeForTraining1));   
+    }
+
+    IEnumerator TrainigSoilder(float timeForTraining)
+    {
+        yield return new WaitForSeconds(timeForTraining);
+        Instantiate(soilder_1, transform.position, Quaternion.identity);
+        army[army.Length] = soilder_1;
+        StopCoroutine(TrainigSoilder(timeForTraining));
+    }
 
 }
